@@ -1,0 +1,19 @@
+# 夜市跑單幫：遊玩人次計數服務
+name = "night-market-counter"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+workers_dev = true
+preview_urls = false  # 不產生額外的預覽網址
+
+[vars]
+# 允許回報人次的網站（逗號分隔）；其他網站只能讀不能寫
+ALLOWED_ORIGINS = "https://dayomoosuntools-git.github.io"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "night-market-counter"
+database_id = "601dee50-2388-4d51-b6f8-c42b951434ee"
+migrations_dir = "migrations"
+
+[observability]
+enabled = true

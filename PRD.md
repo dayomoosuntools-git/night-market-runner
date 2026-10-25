@@ -220,3 +220,11 @@ assets/
 - **打工餐點依關卡變多**：只出該關有開的攤位，第 1 關 4 種、第 2 關 6 種、第 3 關 8 種，數字鍵 1～N 對應
 - **打工加速變慢**：出現間隔 1.3 → 0.95 秒、滑動 150 → 220 px/秒；工資提高到 $6／份，全對約 $100～115
 - 修正：街上太擠時老闆娘不會再錯過出場（找不到位置會下一幀再試）
+
+## 18. v1.8 上線與遊玩人次
+- 遊戲公開在 GitHub Pages：https://dayomoosuntools-git.github.io/night-market-runner/
+- 遊玩人次計數：Cloudflare Worker（`worker/`）＋ D1，網址 https://night-market-counter.dayomoosun.workers.dev
+  - 每個分頁第一次開始關卡時回報一次，同一 IP 一分鐘內只算一次
+  - 只有正式網址能寫入；IP 只存加鹽雜湊、一天後刪除
+  - 標題畫面右下角顯示「已有 N 人次來夜市跑單」，服務連不上時不顯示、不影響遊戲
+- 安全：CSP 只允許本站資源與計數服務、強制 HTTPS、不帶 referrer

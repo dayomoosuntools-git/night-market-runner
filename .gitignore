@@ -4,3 +4,8 @@ Thumbs.db
 
 # 本機開發設定（不需要公開）
 .claude/
+
+# 計數服務（worker/）的本機套件與暫存
+worker/node_modules/
+worker/.wrangler/
+worker/.dev.vars

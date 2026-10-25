@@ -117,9 +117,9 @@ NM.config = {
     magic: { name: '百寶袋', desc: '按 F 發動 10 秒：交餐自動拿對的，不用 Q/E 換', price: 80, max: 3, duration: 10 },
   },
 
-  // 遊玩人次計數服務（worker/ 部署到 Cloudflare 後填入網址，例如 https://night-market-counter.xxx.workers.dev）
-  // 留空就不計數、不顯示
+  // 遊玩人次計數服務（worker/，部署在 Cloudflare）；留空就不計數、不顯示
+  // 換網址時，index.html 的 Content-Security-Policy connect-src 也要一起改
   stats: {
-    endpoint: '',
+    endpoint: 'https://night-market-counter.dayomoosun.workers.dev',
   },
 };

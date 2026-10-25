@@ -35,6 +35,26 @@
   - `_pixel_v1/`：早期像素風版本
   - `_mockups_3d/`：3D 風格示意圖
 - `PRD.md`：遊戲企劃
+- `worker/`：遊玩人次計數服務（Cloudflare Worker + D1）
+
+## 遊玩人次計數
+
+標題畫面右下角顯示的人次來自 `worker/` 的計數服務：
+
+- 每個分頁第一次開始關卡時回報一次；同一個 IP 一分鐘內只算一次
+- 只有正式網址 `https://dayomoosuntools-git.github.io` 能回報，其他網站只能讀
+- 不保存原始 IP，只存加鹽雜湊，一天後自動刪除
+- 計數服務連不上時遊戲照常運作，只是不顯示人次
+
+重新部署：
+
+```bash
+cd worker
+npm install
+npx wrangler deploy
+```
+
+第一次在新帳號部署需要 `npx wrangler login`、`npx wrangler d1 create night-market-counter`（把 id 填進 `wrangler.toml`）、`npx wrangler d1 migrations apply night-market-counter --remote`，以及用 `npx wrangler secret put SALT` 設定一組隨機字串。
 
 ## 製作
 
