@@ -1,0 +1,32 @@
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #0d0f22;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#game {
+  display: block;
+  width: min(100vw, calc(100vh * 16 / 9));
+  height: auto;
+  aspect-ratio: 16 / 9;
+  background: #1a1d3a;
+}
+
+#cert-name {
+  position: absolute;
+  box-sizing: border-box;
+  padding: 0 0.6em;
+  border: 3px solid #ffb347;
+  border-radius: 8px;
+  background: #fffbe9;
+  color: #3a1a0a;
+  font-family: "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+  font-weight: bold;
+  outline: none;
+}
