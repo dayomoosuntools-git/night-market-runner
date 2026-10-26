@@ -18,9 +18,9 @@ NM.GameScene = class {
       open: this.level.stalls.includes(s.food),
       isNew: !prev.includes(s.food),
     }));
-    const fresh = this.stalls.filter((s) => s.open && s.isNew);
+    const fresh = this.stalls.filter((s) => s.open && s.newTime > 0);
     // 關掉操作說明後，畫面中間公告新開的攤位在哪一排
-    this.newsTime = fresh.length ? 5 : 0;
+    this.newsTime = fresh.length ? cfg.newStallBadge : 0;
     this.news = fresh.map((s) => `${cfg.foods[s.food].name}（${s.row === 'top' ? '上排' : '下排'}）`).join('、');
     this.trashCans = cfg.trashCans.map((t) => ({ ...t, radius: 22 }));
     this.customers = [];

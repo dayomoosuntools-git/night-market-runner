@@ -74,6 +74,8 @@ NM.config = {
     durationMin: 6, durationMax: 10,  // 排隊狀態持續多久
   },
 
+  newStallBadge: 5, // 新開的攤位開場顯示「新開張」與公告幾秒
+
   levels: [
     {
       name: '第 1 關', duration: 60, target: 350,
