@@ -9,3 +9,6 @@ Thumbs.db
 worker/node_modules/
 worker/.wrangler/
 worker/.dev.vars
+
+# 影片開場預告（只放在本機，不公開）
+trailer/
