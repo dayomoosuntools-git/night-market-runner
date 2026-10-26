@@ -17,3 +17,7 @@ migrations_dir = "migrations"
 
 [observability]
 enabled = true
+
+# 只保留程式自己寫的錯誤紀錄；關掉每次請求的自動紀錄，避免 Cloudflare 後台留下訪客 IP 等請求資訊
+[observability.logs]
+invocation_logs = false
