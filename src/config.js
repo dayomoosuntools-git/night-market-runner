@@ -83,7 +83,7 @@ NM.config = {
       patience: 18, spawnEvery: 5.5, maxCustomers: 3, queueEvery: 25, crowd: 2,
     },
     {
-      name: '第 2 關', duration: 90, target: 800,
+      name: '第 2 關', duration: 90, target: 600,
       stalls: ['chicken_cutlet', 'bubble_tea', 'stinky_tofu', 'braised_pork_rice', 'oyster_omelet', 'sausage'],
       patience: 10, spawnEvery: 3.4, maxCustomers: 6, queueEvery: 9, crowd: 6,
     },
