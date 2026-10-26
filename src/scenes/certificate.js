@@ -1,4 +1,4 @@
-// 夜市跑單王證書：三關全部通過後，輸入名字或綽號並下載 PNG
+// 今夜送單王證書：三關全部通過後，輸入名字或綽號並下載 PNG
 // 證書底圖用 data URI（assets/certificate_frame.js）載入，雙擊 index.html 開啟時畫布也不會被汙染，才能匯出圖片
 NM.CertificateScene = class {
   constructor() {
@@ -70,7 +70,7 @@ NM.CertificateScene = class {
       c.toBlob((blob) => {
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = `夜市跑單王證書_${this.name}.png`;
+        a.download = `今夜送單王證書_${this.name}.png`;
         a.click();
         setTimeout(() => URL.revokeObjectURL(a.href), 1000);
         this.flash('證書已下載！');
@@ -111,12 +111,12 @@ NM.CertificateScene = class {
     const ink = '#7a2e12';
     const opt = (size, color = ink, extra = {}) => ({ size: size * s, color, stroke: null, ...extra });
     // 左下角有主角、右下角有獎章，文字集中在中上方避開
-    d.text(ctx, '夜市跑單王', cx, y + h * 0.23, { ...opt(64, '#d9361e'), stroke: '#fff6df', strokeWidth: 8 * s });
+    d.text(ctx, '今夜送單王', cx, y + h * 0.23, { ...opt(64, '#d9361e'), stroke: '#fff6df', strokeWidth: 8 * s });
     d.text(ctx, '茲證明', cx, y + h * 0.31, opt(20));
     d.text(ctx, this.name || '＿＿＿＿＿＿', cx, y + h * 0.405, opt(46, '#3a1a0a'));
     ctx.fillStyle = '#c9a25a';
     ctx.fillRect(cx - 180 * s, y + h * 0.43, 360 * s, 3 * s);
-    d.text(ctx, '在《夜市跑單幫》完成全部三關挑戰', cx, y + h * 0.49, opt(19));
+    d.text(ctx, '在《夜市送單王》完成全部三關挑戰', cx, y + h * 0.49, opt(19));
     d.text(ctx, '手腳俐落、使命必達，特頒此證以資鼓勵。', cx, y + h * 0.535, opt(19));
     d.text(ctx, `三關最佳收入合計 $${this.total}`, cx, y + h * 0.61, opt(19, '#b8860b'));
     const dt = this.date;

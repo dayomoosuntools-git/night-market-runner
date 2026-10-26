@@ -56,7 +56,7 @@ NM.ResultScene = class {
 
     a.drawSprite(ctx, `characters/${this.cleared ? 'player' : 'customer_3'}`, W / 2 + 240, 480, 100);
 
-    const next = this.certificate ? 'Enter 領取夜市跑單王證書' : this.hasNext ? 'Enter 下一關' : 'Enter 再玩一次';
+    const next = this.certificate ? 'Enter 領取今夜送單王證書' : this.hasNext ? 'Enter 下一關' : 'Enter 再玩一次';
     d.text(ctx, `${next}　Esc 回標題`, W / 2, 600, { size: 22, color: '#ffe066' });
   }
 };

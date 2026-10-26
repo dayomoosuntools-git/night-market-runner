@@ -1,4 +1,4 @@
-// 遊戲主場景：接單 → 到攤位取餐 → 交給指定客人；90 秒內賺到目標金額就過關
+// 遊戲主場景：接單 → 到攤位取餐 → 交給指定客人；時間內賺到目標金額就過關
 NM.GameScene = class {
   constructor(levelIndex) {
     const cfg = NM.config;
@@ -20,10 +20,11 @@ NM.GameScene = class {
     this.floats = [];
     this.target = null;
     this.paused = false;
-    this.hintTime = this.level.hint ? 12 : 0;
+    this.help = new NM.HelpPanel(this.level); // 開場先看操作說明，玩家按關閉才開始計時
     this.magicTime = 0;   // 百寶袋剩餘秒數
     // 打工事件：老闆娘出現的時間點，boss 是正在街上等人的老闆娘，work 是進行中的打工
-    this.workTimes = cfg.work.eventTimes.map((t) => t + (Math.random() * 8 - 4));
+    const scale = this.level.duration / 90;
+    this.workTimes = cfg.work.eventTimes.map((t) => (t + (Math.random() * 8 - 4)) * scale);
     this.boss = null;
     this.work = null;
     // 商店攤：固定在上排中間，隨時可以光顧；shop 是打開中的商店面板
@@ -38,6 +39,11 @@ NM.GameScene = class {
   // ---------- 更新 ----------
   update(dt) {
     const inp = NM.input;
+    if (this.help) {
+      this.help.update(dt);
+      if (this.help.closed) this.help = null;
+      return;
+    }
     if (this.work) return this.updateWork(dt);
     // 逛商店時夜市暫停
     if (this.shop) {
@@ -87,7 +93,6 @@ NM.GameScene = class {
     // 最後 10 秒音樂加快，最後 5 秒每秒滴答
     NM.audio.rush = this.timeLeft <= 10;
     if (this.timeLeft <= 5 && Math.ceil(this.timeLeft) !== Math.ceil(before)) NM.audio.play('tick');
-    this.hintTime = Math.max(0, this.hintTime - dt);
     this.magicTime = Math.max(0, this.magicTime - dt);
 
     for (const c of this.crowd) c.update(dt);
@@ -362,13 +367,13 @@ NM.GameScene = class {
 
     for (const s of this.stalls) if (s.row === 'bottom') s.draw(ctx, tgt && tgt.obj === s);
 
+    if (this.help) return this.help.draw(ctx);
     if (this.work) return this.work.draw(ctx);
     if (this.shop) return this.shop.draw(ctx);
 
     this.drawQueueWait(ctx);
     this.drawFloats(ctx);
     this.drawHUD(ctx);
-    if (this.hintTime > 0) this.drawHint(ctx);
     if (this.paused) this.drawPause(ctx);
   }
 
@@ -487,15 +492,6 @@ NM.GameScene = class {
     d.text(ctx, `×${n}`, x + 74, y + 30, { size: 18 });
     if (on) d.bar(ctx, x + 10, y + 52, 76, 6, this.magicTime / NM.config.shop.magic.duration);
     else d.text(ctx, 'F 發動', x + 48, y + 60, { size: 13, color: '#bbb', stroke: null });
-  }
-
-  drawHint(ctx) {
-    const W = NM.config.width;
-    ctx.save();
-    ctx.globalAlpha = Math.min(1, this.hintTime);
-    NM.draw.panel(ctx, W / 2 - 380, 110, 760, 40, { border: '#ffe066' });
-    NM.draw.text(ctx, 'WASD 移動・空白鍵 取餐/交餐/打工/逛商店・Q/E 換餐點・F 百寶袋・Esc 暫停', W / 2, 137, { size: 17 });
-    ctx.restore();
   }
 
   drawPause(ctx) {

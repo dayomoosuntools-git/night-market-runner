@@ -43,7 +43,7 @@ NM.stats = {
   draw(ctx) {
     if (this.count === null) return;
     const W = NM.config.width, H = NM.config.height;
-    const text = `已有 ${this.count.toLocaleString('zh-TW')} 人次來夜市跑單`;
+    const text = `已有 ${this.count.toLocaleString('zh-TW')} 人次來夜市送單`;
     NM.draw.text(ctx, text, W - 20, H - 16, { size: 16, color: '#ffe9b0', align: 'right' });
   },
 };

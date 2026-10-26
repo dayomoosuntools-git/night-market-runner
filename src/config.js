@@ -76,10 +76,9 @@ NM.config = {
 
   levels: [
     {
-      name: '第 1 關', duration: 90, target: 350,
+      name: '第 1 關', duration: 60, target: 250,
       stalls: ['chicken_cutlet', 'bubble_tea', 'stinky_tofu', 'braised_pork_rice'],
       patience: 18, spawnEvery: 5.5, maxCustomers: 3, queueEvery: 25, crowd: 2,
-      hint: true,
     },
     {
       name: '第 2 關', duration: 90, target: 800,
@@ -104,7 +103,7 @@ NM.config = {
     pay: 6,                            // 每接對一份的工資（全對約 $100～115）
     goldChance: 0.12, goldMult: 3,     // 金色訂單：工資 ×3
     comboSteps: [8, 16],               // 連擊達到這些數字，倍率 ×2、×3
-    eventTimes: [18, 52],              // 老闆娘大約在開場後幾秒出現（±4 秒）
+    eventTimes: [18, 52],              // 老闆娘大約在開場後幾秒出現（±4 秒，以 90 秒關卡為準，短關卡等比例提早）
     eventStay: 10,                     // 沒去找她的話，幾秒後離開
   },
 

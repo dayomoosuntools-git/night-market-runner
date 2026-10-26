@@ -4,7 +4,7 @@ NM.TitleScene = class {
     this.sel = levelIndex;
     this.t = 0;
     NM.audio.music('title');
-    this.options = NM.config.levels.map((lv) => ({ name: lv.name, sub: `目標 $${lv.target}` }));
+    this.options = NM.config.levels.map((lv) => ({ name: lv.name, sub: `${lv.duration} 秒・目標 $${lv.target}` }));
   }
 
   update(dt) {
@@ -18,7 +18,6 @@ NM.TitleScene = class {
     if (this.sel !== before) NM.audio.play('select');
     if (inp.wasPressed('confirm') || inp.wasPressed('action')) {
       NM.audio.play('start');
-      const opt = this.options[this.sel];
       NM.main.setScene(new NM.GameScene(this.sel));
     }
   }
@@ -32,7 +31,7 @@ NM.TitleScene = class {
     ctx.fillRect(0, 0, W, H);
 
     a.drawFit(ctx, 'ui/logo', W / 2, 150 + Math.sin(this.t * 2) * 4, 820, 180);
-    d.text(ctx, '夜市跑腿送單・90 秒賺到目標金額就過關', W / 2, 270, { size: 22, color: '#ffe9b0' });
+    d.text(ctx, '夜市跑腿送單・限時賺到目標金額就過關', W / 2, 270, { size: 22, color: '#ffe9b0' });
 
     // 選關按鈕
     const levels = this.options;
