@@ -1,7 +1,7 @@
 // 由 manifest.json 產生，讓 index.html 直接雙擊開啟也能載入（file:// 無法 fetch JSON）
 window.NM = window.NM || {};
 NM.manifest = {
-  "version": 6,
+  "version": 7,
   "style": "cute 3D clay chibi, soft lighting, night market (v2)",
   "source": "Higgsfield nano_banana_pro + image_background_remover; pixel v1 kept in assets/_pixel_v1",
   "assets": {
@@ -244,7 +244,7 @@ NM.manifest = {
         "path": "assets/ui/logo.png",
         "label": "標題 Logo",
         "width": 1000,
-        "height": 312,
+        "height": 310,
         "transparent": true
       },
       "order_card": {

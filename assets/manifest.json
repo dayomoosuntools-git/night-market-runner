@@ -1,5 +1,5 @@
 {
-  "version": 6,
+  "version": 7,
   "style": "cute 3D clay chibi, soft lighting, night market (v2)",
   "source": "Higgsfield nano_banana_pro + image_background_remover; pixel v1 kept in assets/_pixel_v1",
   "assets": {
@@ -242,7 +242,7 @@
         "path": "assets/ui/logo.png",
         "label": "標題 Logo",
         "width": 1000,
-        "height": 312,
+        "height": 310,
         "transparent": true
       },
       "order_card": {
