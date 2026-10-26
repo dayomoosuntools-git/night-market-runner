@@ -1,10 +1,10 @@
 // 玩家：位置 (x, y) 是腳底；背包是食物 key 的陣列，sel 是「手上選中」那份
 NM.Player = class {
-  constructor(x, y) {
+  constructor(x, y, items) {
     const cfg = NM.config.player;
     this.x = x;
     this.y = y;
-    this.applyUpgrades();
+    this.applyUpgrades(items);
     this.bag = [];
     this.sel = 0;
     this.facing = 1;
@@ -43,11 +43,10 @@ NM.Player = class {
   }
 
   // 依商店買的跑鞋、外送箱更新速度與背包格數（關卡中買了立刻生效）
-  applyUpgrades() {
+  applyUpgrades(items) {
     const cfg = NM.config.player;
-    const save = NM.save.data;
-    this.bagSize = cfg.bagSize + save.bag;
-    this.speed = cfg.speed * (1 + NM.config.shop.shoes.speedPerLevel * save.shoes);
+    this.bagSize = cfg.bagSize + items.bag;
+    this.speed = cfg.speed * (1 + NM.config.shop.shoes.speedPerLevel * items.shoes);
   }
 
   get selectedFood() {

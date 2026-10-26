@@ -1,4 +1,5 @@
-// 進度存檔（localStorage）：每關是否通過、最佳收入、商店升級；讀寫失敗時就只存在記憶體裡
+// 進度存檔（localStorage）：每關是否通過、最佳收入、證書名字；讀寫失敗時就只存在記憶體裡
+// 商店道具不存檔：只在一路過關時帶到下一關（見 GameScene 的 items）
 NM.save = {
   key: 'nm-progress-v1',
   data: null,
@@ -13,9 +14,6 @@ NM.save = {
       cleared: Array.from({ length: n }, (_, i) => !!(d && d.cleared && d.cleared[i])),
       best: Array.from({ length: n }, (_, i) => (d && d.best && d.best[i]) || 0),
       name: (d && d.name) || '',
-      shoes: (d && d.shoes) || 0,    // 加速跑鞋等級
-      bag: (d && d.bag) || 0,        // 大外送箱等級（背包格數 +bag）
-      magic: (d && d.magic) || 0,    // 百寶袋數量
     };
   },
 
@@ -29,13 +27,6 @@ NM.save = {
     if (cleared) this.data.cleared[i] = true;
     this.data.best[i] = Math.max(this.data.best[i], money);
     this.write();
-  },
-
-  useMagic() {
-    if (this.data.magic <= 0) return false;
-    this.data.magic--;
-    this.write();
-    return true;
   },
 
   allCleared() {

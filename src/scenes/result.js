@@ -1,11 +1,12 @@
 // 結算畫面
 NM.ResultScene = class {
-  constructor({ levelIndex, cleared, money, target, stats }) {
+  constructor({ levelIndex, cleared, money, target, stats, items }) {
     this.levelIndex = levelIndex;
     this.cleared = cleared;
     this.money = money;
     this.target = target;
     this.stats = stats;
+    this.items = items;
     this.hasNext = cleared && levelIndex + 1 < NM.config.levels.length;
     // 三關都通過過，打完最後一關就能領證書
     this.certificate = cleared && !this.hasNext && NM.save.allCleared();
@@ -18,8 +19,9 @@ NM.ResultScene = class {
       return;
     }
     if (inp.wasPressed('confirm')) {
-      const next = this.hasNext ? this.levelIndex + 1 : this.levelIndex;
-      NM.main.setScene(new NM.GameScene(next));
+      // 過關才把道具帶到下一關；重玩這一關一律從零開始
+      if (this.hasNext) NM.main.setScene(new NM.GameScene(this.levelIndex + 1, this.items));
+      else NM.main.setScene(new NM.GameScene(this.levelIndex));
     }
     if (inp.wasPressed('pause')) NM.main.setScene(new NM.TitleScene(this.levelIndex));
   }
@@ -55,6 +57,9 @@ NM.ResultScene = class {
     });
 
     a.drawSprite(ctx, `characters/${this.cleared ? 'player' : 'customer_3'}`, W / 2 + 240, 480, 100);
+
+    const note = this.hasNext ? '商店道具會帶到下一關' : '重玩這一關，商店道具會歸零重新計算';
+    d.text(ctx, note, W / 2, 565, { size: 16, color: '#bbb', stroke: null });
 
     const next = this.certificate ? 'Enter 領取今夜送單王證書' : this.hasNext ? 'Enter 下一關' : 'Enter 再玩一次';
     d.text(ctx, `${next}　Esc 回標題`, W / 2, 600, { size: 22, color: '#ffe066' });

@@ -1,5 +1,5 @@
 // 商店面板：在關卡中走到商店攤按空白鍵打開，用這一關賺到的錢買
-// 加速跑鞋、大外送箱買了就永久生效（存檔），百寶袋是消耗品；逛商店時夜市暫停
+// 買到的道具過關後帶到下一關；失敗重玩或從標題重新開始都會歸零。百寶袋是消耗品；逛商店時夜市暫停
 NM.ShopPanel = class {
   constructor(game) {
     this.game = game;
@@ -13,7 +13,7 @@ NM.ShopPanel = class {
   // 每個商品目前的狀態：等級／持有數、下一個價格（null 表示買滿了）
   info(key) {
     const cfg = NM.config.shop[key];
-    const data = NM.save.data;
+    const data = this.game.items;
     if (key === 'magic') {
       return { cfg, level: `持有 ${data.magic}／${cfg.max}`, price: data.magic < cfg.max ? cfg.price : null };
     }
@@ -31,9 +31,8 @@ NM.ShopPanel = class {
     }
     g.addMoney(-price);
     g.stats.spent += price;
-    NM.save.data[key]++;
-    NM.save.write();
-    g.player.applyUpgrades();
+    g.items[key]++;
+    g.player.applyUpgrades(g.items);
     NM.audio.play('buy');
     this.flash(`買到 ${cfg.name}！`, '#7dff7d');
   }

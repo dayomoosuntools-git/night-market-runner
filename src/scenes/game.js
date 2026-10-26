@@ -1,6 +1,7 @@
 // 遊戲主場景：接單 → 到攤位取餐 → 交給指定客人；時間內賺到目標金額就過關
 NM.GameScene = class {
-  constructor(levelIndex) {
+  // items：從上一關帶過來的商店道具；從標題進來或重玩都是全新的，不累計之前買的
+  constructor(levelIndex, items = NM.GameScene.noItems()) {
     const cfg = NM.config;
     this.levelIndex = levelIndex;
     this.level = cfg.levels[levelIndex];
@@ -8,8 +9,19 @@ NM.GameScene = class {
     this.money = 0;
     this.stats = { delivered: 0, timeouts: 0, wrong: 0, discards: 0, wasted: 0, penalties: 0, workPay: 0, spent: 0 };
 
-    this.player = new NM.Player(cfg.player.start.x, cfg.player.start.y);
-    this.stalls = cfg.stalls.map((s) => new NM.Stall({ ...s, open: this.level.stalls.includes(s.food) }));
+    this.items = { ...items }; // shoes 跑鞋等級、bag 外送箱等級、magic 百寶袋數量
+    this.player = new NM.Player(cfg.player.start.x, cfg.player.start.y, this.items);
+    // 上一關沒開、這一關才開的攤位算「新開張」
+    const prev = levelIndex > 0 ? cfg.levels[levelIndex - 1].stalls : this.level.stalls;
+    this.stalls = cfg.stalls.map((s) => new NM.Stall({
+      ...s,
+      open: this.level.stalls.includes(s.food),
+      isNew: !prev.includes(s.food),
+    }));
+    const fresh = this.stalls.filter((s) => s.open && s.isNew);
+    // 關掉操作說明後，畫面中間公告新開的攤位在哪一排
+    this.newsTime = fresh.length ? 5 : 0;
+    this.news = fresh.map((s) => `${cfg.foods[s.food].name}（${s.row === 'top' ? '上排' : '下排'}）`).join('、');
     this.trashCans = cfg.trashCans.map((t) => ({ ...t, radius: 22 }));
     this.customers = [];
     this.crowd = Array.from({ length: this.level.crowd || 0 }, () => new NM.Crowd(true));
@@ -94,6 +106,7 @@ NM.GameScene = class {
     NM.audio.rush = this.timeLeft <= 10;
     if (this.timeLeft <= 5 && Math.ceil(this.timeLeft) !== Math.ceil(before)) NM.audio.play('tick');
     this.magicTime = Math.max(0, this.magicTime - dt);
+    this.newsTime = Math.max(0, this.newsTime - dt);
 
     for (const c of this.crowd) c.update(dt);
     this.updateSpawning(dt);
@@ -118,10 +131,11 @@ NM.GameScene = class {
   useMagic() {
     const p = this.player;
     if (this.magicTime > 0) return;
-    if (!NM.save.useMagic()) {
+    if (this.items.magic <= 0) {
       this.float('沒有百寶袋（商店可買）', p.x, p.y - 110, '#aaa');
       return;
     }
+    this.items.magic--;
     this.magicTime = NM.config.shop.magic.duration;
     NM.audio.play('magic');
     this.float('百寶袋發動！自動拿對的餐', p.x, p.y - 110, '#d9a5ff');
@@ -339,6 +353,7 @@ NM.GameScene = class {
       money: this.money,
       target: this.level.target,
       stats: this.stats,
+      items: this.items,
     }));
   }
 
@@ -374,6 +389,7 @@ NM.GameScene = class {
     this.drawQueueWait(ctx);
     this.drawFloats(ctx);
     this.drawHUD(ctx);
+    if (this.newsTime > 0) this.drawNews(ctx);
     if (this.paused) this.drawPause(ctx);
   }
 
@@ -484,7 +500,7 @@ NM.GameScene = class {
   // 背包右邊的百寶袋欄：數量、發動中倒數
   drawMagic(ctx, x, y) {
     const d = NM.draw;
-    const n = NM.save.data.magic;
+    const n = this.items.magic;
     const on = this.magicTime > 0;
     if (!n && !on) return;
     d.panel(ctx, x, y - 26, 96, 92, { fill: on ? 'rgba(90, 40, 130, 0.9)' : 'rgba(20, 22, 48, 0.8)', border: on ? '#d9a5ff' : null });
@@ -492,6 +508,16 @@ NM.GameScene = class {
     d.text(ctx, `×${n}`, x + 74, y + 30, { size: 18 });
     if (on) d.bar(ctx, x + 10, y + 52, 76, 6, this.magicTime / NM.config.shop.magic.duration);
     else d.text(ctx, 'F 發動', x + 48, y + 60, { size: 13, color: '#bbb', stroke: null });
+  }
+
+  drawNews(ctx) {
+    const W = NM.config.width;
+    ctx.save();
+    ctx.globalAlpha = Math.min(1, this.newsTime);
+    NM.draw.panel(ctx, W / 2 - 330, 300, 660, 70, { fill: 'rgba(150, 30, 25, 0.92)', border: '#ffe066', radius: 14, lineWidth: 4 });
+    NM.draw.text(ctx, '新攤位開張！快去光顧', W / 2, 328, { size: 22, color: '#ffe066' });
+    NM.draw.text(ctx, this.news, W / 2, 358, { size: 20 });
+    ctx.restore();
   }
 
   drawPause(ctx) {
@@ -502,6 +528,8 @@ NM.GameScene = class {
     NM.draw.text(ctx, 'Esc 繼續　Enter 回標題', W / 2, H / 2 + 40, { size: 20 });
   }
 };
+
+NM.GameScene.noItems = () => ({ shoes: 0, bag: 0, magic: 0 });
 
 function pick(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
