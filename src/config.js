@@ -76,7 +76,7 @@ NM.config = {
 
   levels: [
     {
-      name: '第 1 關', duration: 60, target: 250,
+      name: '第 1 關', duration: 60, target: 350,
       stalls: ['chicken_cutlet', 'bubble_tea', 'stinky_tofu', 'braised_pork_rice'],
       patience: 18, spawnEvery: 5.5, maxCustomers: 3, queueEvery: 25, crowd: 2,
     },
